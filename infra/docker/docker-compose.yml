@@ -1,0 +1,28 @@
+# 整体：
+# 定义怎么运行：端口映射、环境变量从哪里读、启动顺序等。
+# 一条命令 docker compose up 就能启动整个应用。
+
+# code
+# context: ../.. — 构建上下文是项目根目录（从 infra/docker/ 往上两级），Docker 需要能看到根目录的所有文件才能执行 COPY . .
+# docke端口映射：宿主机端口:容器端口。容器内部监听 3000，映射到你电脑的 3000，浏览器访问 localhost:3000 就能连到容器。
+# 从项目根目录的 .env 文件读取所有环境变量注入容器，不需要在 compose 文件里硬写密钥。
+# restart: unless-stopped  容器意外崩溃时自动重启，除非你主动停止它。生产环境标配。
+
+# YAML 用空格缩进表示层级关系，有三条规则：
+# 规则 1：只能用空格，不能用 Tab
+# Tab 在 YAML 里是非法的，用了直接报错。
+# 规则 2：同级对齐
+# 规则 3：缩进量一致就行，通常用 2 或 4 个空格
+
+
+
+services:
+  backend:
+    build:
+      context: ../..
+      dockerfile: infra/docker/backend.Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ../../.env
+    restart: unless-stopped
