@@ -5,9 +5,9 @@
 // GoogleUser 这个 interface 就是用来约定"整理后的那个对象应该长什么样",
 // 让后续每一处用到它的代码(Strategy、Service、控制器)都对"这个对象有哪些字段"有一致、可靠的认知。
 // 一句话:它是这条认证流水线上传递的"用户数据包"的规格说明书。
-export interface GoogleUser{
-     googleId: string,
-     email: string,
-     name: string,
-     picture?: string,
+export interface GoogleUser {
+  googleId: string;
+  email: string;
+  name: string;
+  picture?: string;
 }
