@@ -18,7 +18,7 @@
 
 services:
   backend:
-    image: ghcr.io/lnuo026//nestjs-todolist_cicddeploy:latest
+    image: ghcr.io/lnuo026/nestjs-todolist_cicddeploy:latest
     ports:
       - "3000:3000"
     env_file:

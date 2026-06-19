@@ -55,7 +55,7 @@ jobs:
                     context: .
                     file: infra/docker/backend.Dockerfile
                     push: true
-                    tags: ghcr.io/lnuo026//nestjs-todolist_cicddeploy:latest
+                    tags: ghcr.io/lnuo026/nestjs-todolist_cicddeploy:latest
      
      deploy:
           runs-on: ubuntu-latest
