@@ -28,7 +28,7 @@ import { UserModule } from '../user/user.module';
         secret: config.get<string>('JWT_SECRET'),
         signOptions: {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          expiresIn: config.get<string>('JWT_EXPIRES_IN') ?? '7d' as any,
+          expiresIn: config.get<string>('JWT_EXPIRES_IN') ?? ('7d' as any),
         },
       }),
     }),
