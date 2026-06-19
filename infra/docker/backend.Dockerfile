@@ -29,9 +29,10 @@ ENV NODE_ENV=production
 
 
 COPY --from=builder /app/package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev --ignore-scripts
 # 从第一阶段（builder）复制 package.json，只安装生产依赖（不装 devDependencies），镜像更小。
 #  --omit=dev 是 npm 9+ 的正确写法，等价于旧的 --only=production
+# --ignore-scripts 的作用：告诉 npm 安装依赖时不执行任何lifecycle 脚本（prepare、postinstall 等）。Docker生产镜像里本来就不需要跑 husky。
 
 COPY --from=builder /app/dist ./dist
 # 从第一阶段复制编译好的 dist/ 目录，这是真正要运行的代码。
