@@ -17,7 +17,7 @@ jobs:
                - name: Setup Node.js
                  uses: actions/setup-node@v4
                  with:
-                    node-version: '20'
+                    node-version: '24'
                
                - name: Install dependencies
                  run: npm ci
@@ -48,7 +48,7 @@ jobs:
                     registry: ghcr.io
                     username: ${{ github.actor }}
                     password: ${{ secrets.GITHUB_TOKEN }}
-               
+              
                - name: Build and push Docker image
                  uses: docker/build-push-action@v5
                  with:
@@ -56,6 +56,8 @@ jobs:
                     file: infra/docker/backend.Dockerfile
                     push: true
                     tags: ghcr.io/lnuo026/nestjs-todolist_cicddeploy:latest
+                    cache-from: type=gha
+                    cache-to: type=gha,mode=max
      
      deploy:
           runs-on: ubuntu-latest

@@ -1,5 +1,5 @@
-FROM node:20-alpine AS builder
-# 以 Node.js 20 的 Alpine Linux 版本作为基础镜像。
+FROM node:24-alpine AS builder
+# 以 Node.js 24 的 Alpine Linux 版本作为基础镜像。
 
 
 WORKDIR /app
@@ -19,7 +19,7 @@ RUN npm run build
 # 复制所有源码，执行 npm run build，把 TypeScript 编译成 JavaScript，输出到 dist/ 目录。
 
 # 现在第一阶段（builder）已经准备好了编译后的代码和生产依赖，接下来第二阶段构建最终运行的镜像。
-FROM node:20-alpine
+FROM node:24-alpine
 # 第二阶段重新从干净的基础镜像开始，不带第一阶段的源码和开发依赖。
 
 WORKDIR /app
