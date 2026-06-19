@@ -21,9 +21,8 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "src/**/*.ts":[
-      "eslint --fix",
-      "git add"
+    "src/**/*.ts": [
+      "eslint --fix"
     ]
   },
   "dependencies": {
@@ -52,6 +51,8 @@
     "winston": "^3.19.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@nestjs/cli": "^11.0.0",
