@@ -29,9 +29,9 @@ ENV NODE_ENV=production
 
 
 COPY --from=builder /app/package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 # 从第一阶段（builder）复制 package.json，只安装生产依赖（不装 devDependencies），镜像更小。
-
+#  --omit=dev 是 npm 9+ 的正确写法，等价于旧的 --only=production
 
 COPY --from=builder /app/dist ./dist
 # 从第一阶段复制编译好的 dist/ 目录，这是真正要运行的代码。

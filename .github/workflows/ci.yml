@@ -10,7 +10,6 @@ on:
 jobs:
      build-and-test:
           runs-on: ubuntu-latest
-
           steps:
                - name: Checkout code
                  uses: actions/checkout@v4
@@ -31,10 +30,36 @@ jobs:
 
                - name: Build
                  run: npm run build
+                    
+     build-and-push-:
+          runs-on: ubuntu-latest
+          needs: build-and-test
+          if: github.ref == 'refs/heads/main' && (github.event_name == 'push' ||github.event_name == 'workflow_dispatch')
+          permissions:
+               contents: read
+               packages: write
+          steps:
+               - name: Checkout code
+                 uses: actions/checkout@v4
+               
+               - name: Log in to GitHub Container Registry
+                 uses: docker/login-action@v3
+                 with:
+                    registry: ghcr.io
+                    username: ${{ github.actor }}
+                    password: ${{ secrets.GITHUB_TOKEN }}
+               
+               - name: Build and push Docker image
+               uses: docker/build-push-action@v5
+               with:
+                    context: .
+                    file: infra/docker/backend.Dockerfile
+                    push: true
+                    tags: ghcr.io/lnuo026/nestjs-todolist_CicdDeploy:latest
      
      deploy:
           runs-on: ubuntu-latest
-          needs: build-and-test
+          needs: build-and-push
           if: github.ref == 'refs/heads/main' && (github.event_name == 'push' ||github.event_name == 'workflow_dispatch')
           
 
@@ -51,7 +76,7 @@ jobs:
                       --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
                       --document-name "AWS-RunShellScript" \
                       --comment "Deploy from GitHub Actions" \
-                      --parameters '{"commands":["set -e","git config --system --add safe.directory /home/ubuntu/nestjs","cd /home/ubuntu/nestjs","git pull","sudo docker compose -f infra/docker/docker-compose.yml up -d --build"],"workingDirectory":["/home/ubuntu/nestjs"]}' \
+                      --parameters '{"commands":["set -e","git config --system --add safe.directory /home/ubuntu/nestjs","cd /home/ubuntu/nestjs","git pull","sudo docker compose -f infra/docker/docker-compose.yml pull","sudo docker compose -f infra/docker/docker-compose.yml up -d"],"workingDirectory":["/home/ubuntu/nestjs"]}' \
                       --query "Command.CommandId" \
                       --output text)
 

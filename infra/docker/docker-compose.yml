@@ -14,13 +14,11 @@
 # 规则 2：同级对齐
 # 规则 3：缩进量一致就行，通常用 2 或 4 个空格
 
-
+# 删掉build 每次ci build都要重新构建镜像，开发阶段改代码频繁，构建慢。改成直接引用 ghcr.io 上的镜像。EC2 不再编译源码，只拉镜像
 
 services:
   backend:
-    build:
-      context: ../..
-      dockerfile: infra/docker/backend.Dockerfile
+    image: ghcr.io/lnuo026/nestjs-todolist_CicdDeploy:latest
     ports:
       - "3000:3000"
     env_file:
