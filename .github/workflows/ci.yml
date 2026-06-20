@@ -81,14 +81,14 @@ jobs:
                       --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
                       --document-name "AWS-RunShellScript" \
                       --comment "Deploy from GitHub Actions" \
-                      --parameters '{"commands":["set -e","git config --system --add safe.directory /home/ubuntu/nestjs","cd /home/ubuntu/nestjs","git pull","sudo docker compose -f infra/docker/docker-compose.yml pull","sudo docker compose -f infra/docker/docker-compose.yml up -d"],"workingDirectory":["/home/ubuntu/nestjs"]}' \
+                      --parameters '{"commands":["set -e","git config --system --add safe.directory /home/ubuntu/nestjs","cd /home/ubuntu/nestjs","git pull","sudo docker pull --progress=plain ghcr.io/lnuo026/nestjs-todolist_cicddeploy:latest","sudo docker compose -f infra/docker/docker-compose.yml up -d"],"workingDirectory":["/home/ubuntu/nestjs"]}' \
                       --query "Command.CommandId" \
                       --output text)
 
                     echo "Command sent, ID: $command_id"
 
                     echo "Waiting for command to complete (max 15 minutes)..."
-                    
+
                     for i in $(seq 1 90); do
                       status=$(aws ssm get-command-invocation \
                         --command-id "$command_id" \
