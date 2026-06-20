@@ -81,7 +81,7 @@ jobs:
                       --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
                       --document-name "AWS-RunShellScript" \
                       --comment "Deploy from GitHub Actions" \
-                      --parameters '{"commands":["set -e","git config --system --add safe.directory /home/ubuntu/nestjs","cd /home/ubuntu/nestjs","git pull","sudo docker compose -f infra/docker/docker-compose.yml pull","sudo docker compose -f infra/docker/docker-compose.yml up -d"],"workingDirectory":["/home/ubuntu/nestjs"]}' \
+                      --parameters '{"commands":["set -e","git config --system --add safe.directory /home/ubuntu/nestjs","cd /home/ubuntu/nestjs","git pull","sudo docker compose -f infra/docker/docker-compose.yml pull","sudo docker compose -f infra/docker/docker-compose.yml up -d","echo Waiting for container to start...","sleep 5","for i in $(seq 1 15); do curl -sf https://api.lnuo.me/health > /dev/null 2>&1 && echo Health check passed && exit 0 || true; echo Attempt $i/15 failed, retrying in 3s...; sleep 3; done; echo Health check failed after 15 attempts; exit 1"],"workingDirectory":["/home/ubuntu/nestjs"]}' \
                       --query "Command.CommandId" \
                       --output text)
 
