@@ -81,7 +81,7 @@ jobs:
                       --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
                       --document-name "AWS-RunShellScript" \
                       --comment "Deploy from GitHub Actions" \
-                      --parameters '{"commands":["set -e","git config --system --add safe.directory /home/ubuntu/nestjs","cd /home/ubuntu/nestjs","git pull","sudo docker pull ghcr.io/lnuo026/nestjs-todolist_cicddeploy:latest","sudo docker compose -f infra/docker/docker-compose.yml up -d"],"workingDirectory":["/home/ubuntu/nestjs"]}' \
+                      --parameters '{"commands":["set -e","git config --system --add safe.directory /home/ubuntu/nestjs","cd /home/ubuntu/nestjs","git pull","sudo docker pull ghcr.io/lnuo026/nestjs-todolist_cicddeploy:latest","sudo docker compose -f infra/docker/docker-compose.yml up -d","sudo docker system prune -f"],"workingDirectory":["/home/ubuntu/nestjs"]}' \
                       --query "Command.CommandId" \
                       --output text)
 
