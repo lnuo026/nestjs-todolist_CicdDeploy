@@ -16,7 +16,7 @@ interface UserStore {
 
 // 真正创建仓库
 // (set) => ({...}) — set 是 Zustand 给你的"修改器",调用它就能改仓库里的数据
-export const userUserStore = create<UserStore>((set) => ({
+export const useUserStore = create<UserStore>((set) => ({
      user: null,
      setUser: (user) => set({ user }),
      clearUser: () => set({ user: null }),
