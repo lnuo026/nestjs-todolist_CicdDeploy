@@ -29,7 +29,7 @@ export class AuthController {
   @Get('google/callback') // GET /auth/google/callback
   googleCallback(@CurrentUser() user: UserDocument, @Res() res: Response) {
     this.authService.login(user, res); // 登录成功后，AuthService 会在 res 上设置 JWT Cookie
-    res.redirect('http://localhost:3000/users/profile'); //callback 完成后不返回数据，而是重定向到前端页面
+    res.redirect(process.env.FRONTEND_URL ?? 'http://localhost:5173'); //callback 完成后不返回数据，而是重定向到前端页面
   }
 
   // 退出登录，清除 Cookie，返回提示信息
@@ -37,6 +37,6 @@ export class AuthController {
   @Get('logout')
   logout(@Res() res: Response) {
     this.authService.logout(res);
-    res.redirect('http://localhost:3000'); // 退出登录后重定向到主页
+    res.redirect(process.env.FRONTEND_URL ?? 'http://localhost:5173'); // 退出登录后重定向到主页
   }
 }
