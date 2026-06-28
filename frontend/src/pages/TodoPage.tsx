@@ -1,6 +1,6 @@
 import {  useEffect, useState } from "react";
 import { useUserStore } from "../store/userStore";
-import { getTodos, createTodo, updateTodo, deleteTodo } from "../api/todos.ts";
+import { getTodos, createTodo, updateTodo, deleteTodo } from "../api/todos";
 
 interface Todo {
      _id: string
@@ -24,6 +24,7 @@ export default function TodoPage() {
   const [todos, setTodos] = useState<Todo[]>([])
   // 输入框内容
   const [input, setInput] = useState('')
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium')
 
 
 //页面加载时拉取列表
@@ -42,7 +43,7 @@ useEffect(() => {
 const handleAdd = async () => {
      if(!input.trim()) 
           return 
-     const todo = await createTodo({ title: input.trim() })
+     const todo = await createTodo({ title: input.trim(), priority })
      setTodos ((prev) => [...prev, todo as any])
      setInput('')
 }
@@ -63,21 +64,17 @@ const handleLogout = async () => {
 }
 
 return (
-           <div className="min-h-screen bg-gray-50">
-        <header className="bg-white border-b px-6 py-4
-  flex items-center justify-between">
-          <h1 className="text-xl font-semibold
-  text-gray-800">Todolist</h1>
-          <div className="flex items-center gap-3">
-            {user?.picture && <img src={user.picture}
-  className="w-8 h-8 rounded-full" />}
-            <span className="text-sm
-  text-gray-600">{user?.name}</span>
-            <button onClick={handleLogout}
-  className="text-sm text-gray-500 hover:text-red-500
-  transition"> Logout</button>
-          </div>
-        </header>
+          <div className="min-h-screen bg-gray-50">
+               <header className="bg-white border-b px-6 py-4 flex items-center justify-between">
+                    <h1 className="text-xl font-semibold text-gray-800">Todolist</h1>
+                    <div className="flex items-center gap-3">
+                         {user?.picture && <img src={user.picture} className="w-8 h-8 rounded-full" />}
+                              <span className="text-sm text-gray-600">
+                                   {user?.name}
+                              </span>
+                         <button onClick={handleLogout}  className="text-sm text-gray-500 hover:text-red-500 transition"> Logout</button>
+                    </div>
+               </header>
 
         <main className="max-w-2xl mx-auto px-4 py-8">
           <div className="flex gap-2 mb-6">
@@ -85,11 +82,24 @@ return (
                  type="text"
                  value={input}
                  onChange={(e) => setInput(e.target.value)}
+                 onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
                  placeholder="Add a new todo..."
                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-               />
+               >
+               <select
+                 value={priority}
+                 onChange={(e) => setPriority(e.target.value as 'low' | 'medium' | 'high')}
+                 className="flex-1 border border-gray-300 rounded-lgpx-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                 />
+               
+                 <option value="low">Low</option>
+                 <option value="medium">Medium</option>
+                 <option value="high">High</option>
+               <select/>
 
-               <button onClick ={handleAdd}  className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition">Add Todo</button>
+               <button onClick ={handleAdd}  className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition">
+                    Add Todo
+               </button>
           </div>
           
           <ul className = "space-y-2">
