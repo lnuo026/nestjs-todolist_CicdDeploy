@@ -85,17 +85,17 @@ return (
                  onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
                  placeholder="Add a new todo..."
                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-               >
+               />
                <select
                  value={priority}
                  onChange={(e) => setPriority(e.target.value as 'low' | 'medium' | 'high')}
-                 className="flex-1 border border-gray-300 rounded-lgpx-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-                 />
+                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                 >
                
                  <option value="low">Low</option>
                  <option value="medium">Medium</option>
                  <option value="high">High</option>
-               <select/>
+               </select>
 
                <button onClick ={handleAdd}  className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition">
                     Add Todo
