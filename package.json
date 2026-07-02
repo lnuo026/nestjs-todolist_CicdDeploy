@@ -7,10 +7,21 @@
           "lint:fe": "npm run lint --prefix frontend",
           "install:all": "npm install --prefix backend && npm install --prefix frontend"
      },
+     "lint-staged": {
+          "backend/src/**/*.ts": [
+               "npm run lint --prefix backend --",
+               "prettier --write"
+          ],
+          "frontend/src/**/*.{ts,tsx}": [
+               "npm run lint --prefix frontend --",
+               "prettier --write"
+          ]
+     },
      "devDependencies": {
           "@commitlint/cli": "^21.0.2",
           "@commitlint/config-conventional": "^21.0.2",
           "concurrently": "^9.0.0",
-          "lint-staged": "^16.4.0"
+          "lint-staged": "^16.4.0",
+          "prettier": "^3.9.4"
      }
 }
