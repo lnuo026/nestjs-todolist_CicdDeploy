@@ -42,9 +42,7 @@ export class TodosService {
   async update(id: string, dto: UpdateTodoDto): Promise<TodoDocument> {
     //  默认返回更新前的旧数据，加了这个才返回更新后的新数据
     // timestamps: true 已经在 Schema 里设了
-    const todo = await this.todoModel
-      .findByIdAndUpdate(id, dto, { new: true })
-      .exec();
+    const todo = await this.todoModel.findByIdAndUpdate(id, dto, { new: true }).exec();
     if (!todo) {
       throw new NotFoundException(`Todo with id ${id} not found`);
     }

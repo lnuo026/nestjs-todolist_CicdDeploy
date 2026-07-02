@@ -1,10 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 
@@ -22,9 +16,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     // 判断异常是不是 HttpException,HttpException 是 Nest 自带的错误类（如 BadRequestException）。
     // 如果是它，就用它自己的状态码；否则一律按 500 处理。
     const isHttpException = exception instanceof HttpException;
-    const status = isHttpException
-      ? exception.getStatus()
-      : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status = isHttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
     // 提取错误信息
     // Nest 的异常有时返回字符串，有时是对象。
@@ -36,8 +28,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const message =
       typeof exceptionResponse === 'string'
         ? exceptionResponse
-        : (exceptionResponse as { message?: string | string[] }).message ||
-          'Internal Server Error';
+        : (exceptionResponse as { message?: string | string[] }).message || 'Internal Server Error';
 
     response.status(status).json({
       statusCode: status,

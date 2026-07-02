@@ -9,10 +9,7 @@ import { GoogleUser } from '../types/google-user.type';
 @Injectable()
 // PassportStrategy() 是 NestJS 提供的函数，把 Passport 的原生 Strategy 包装成 NestJS 可以管理的类。
 // 第二个参数 GOOGLE_STRATEGY（就是字符串 'google'）是策略的注册名。
-export class GoogleStrategy extends PassportStrategy(
-  Strategy,
-  GOOGLE_STRATEGY,
-) {
+export class GoogleStrategy extends PassportStrategy(Strategy, GOOGLE_STRATEGY) {
   constructor(
     config: ConfigService,
     private readonly userService: UserService,

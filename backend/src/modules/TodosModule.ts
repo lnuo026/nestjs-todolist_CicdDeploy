@@ -11,9 +11,7 @@ import { Todo, TodoSchema } from 'src/todos/schemas/todo.schema';
 // schema: TodoSchema — 用这个 Schema 定义文档结构
 // 为什么是数组 [{ ... }] 因为一个模块可能同时用多张表：
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Todo.name, schema: TodoSchema }]),
-  ],
+  imports: [MongooseModule.forFeature([{ name: Todo.name, schema: TodoSchema }])],
   controllers: [TodosController],
   providers: [TodosService],
 })

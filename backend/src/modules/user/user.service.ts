@@ -5,9 +5,7 @@ import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-  ) {}
+  constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>) {}
 
   // 接收从 Google 拿到的用户信息，返回数据库里的 User 文档。"找到就返回，找不到就创建"。
   findOrCreate(profile: {

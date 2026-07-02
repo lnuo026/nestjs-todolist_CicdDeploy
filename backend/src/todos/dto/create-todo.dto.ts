@@ -1,11 +1,5 @@
 import { TodoPriority } from '../schemas/todo.schema';
-import {
-  IsString,
-  IsNotEmpty,
-  IsOptional,
-  IsEnum,
-  MaxLength,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsEnum, MaxLength } from 'class-validator';
 
 export class CreateTodoDto {
   @IsString()

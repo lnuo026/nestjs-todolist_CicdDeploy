@@ -19,9 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, JWT_STRATEGY) {
       // ??  null 是：如果 Cookie 里没有这个字段，返回 null
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) =>
-          (req?.cookies as Record<string, string> | undefined)?.[
-            'access_token'
-          ] ?? null,
+          (req?.cookies as Record<string, string> | undefined)?.['access_token'] ?? null,
       ]),
       // 验证 JWT 签名用的密钥。签发时用这个密钥加密，验证时用同一个密钥解密。两边必须一致，否则验证失败。
       secretOrKey: config.get<string>('JWT_SECRET')!,
