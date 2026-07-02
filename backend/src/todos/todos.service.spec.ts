@@ -14,8 +14,8 @@ describe('TodoService', () => {
   // 所有 it() 都能访问
   const mockTodoModel = {
     create: jest.fn(),
-    findById: jest.fn(),
-    findByIdAndDelete: jest.fn(),
+    findOne: jest.fn(),
+    findOneAndDelete: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -48,9 +48,13 @@ describe('TodoService', () => {
       done: false,
     });
 
-    const result = await service.create({
-      title: 'grocery shopping',
-    });
+    // create 现在要传两个参数：dto 和 userId
+    const result = await service.create(
+      {
+        title: 'grocery shopping',
+      },
+      'user123',
+    );
 
     expect(result.done).toBe(false);
   });
@@ -60,20 +64,20 @@ describe('TodoService', () => {
     // 这两个的区别在于返回值是否是 Promise。
     // mockReturnValue(x)直接返回 x，同步的，不是 Promise：
     // mockResolvedValue(x)返回 Promise.resolve(x)，异步的：需要 await
-    mockTodoModel.findById.mockReturnValue({
+    mockTodoModel.findOne.mockReturnValue({
       // 数据库返回 null
       exec: jest.fn().mockResolvedValue(null),
     });
 
-    await expect(service.findOne('fakeid')).rejects.toThrow(NotFoundException);
+    await expect(service.findOne('fakeid', 'user123')).rejects.toThrow(NotFoundException);
   });
 
   it('remove -should return deleted: true when success', async () => {
-    mockTodoModel.findByIdAndDelete.mockReturnValue({
+    mockTodoModel.findOneAndDelete.mockReturnValue({
       exec: jest.fn().mockResolvedValue({ _id: '123' }),
     });
 
-    const result = await service.remove('123');
+    const result = await service.remove('123', 'user123');
 
     // toEqual vs toBe：
     // toBe 比较基本类型（数字、字符串、boolean）

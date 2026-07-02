@@ -28,24 +28,24 @@ export class TodosController {
   @Get(':id')
   // @Param('id', ...) 提取路径参数 id，并使用 ParseUUIDPipe 验证它是否是有效的 UUID
   // @Param(参数名, 管道列表)
-  findOne(@Param('id') id: string) {
-    return this.todosService.findOne(id);
+  findOne(@Param('id') id: string, @CurrentUser() user: { id: string }) {
+    return this.todosService.findOne(id, user.id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() dto: CreateTodoDto, @CurrentUser() user: { id: string }) {
-    return this.todosService.create({ ...dto, userId: user.id });
+    return this.todosService.create(dto, user.id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateTodoDto) {
-    return this.todosService.update(id, dto);
+  update(@Param('id') id: string, @Body() dto: UpdateTodoDto, @CurrentUser() user: { id: string }) {
+    return this.todosService.update(id, dto, user.id);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  remove(@Param('id') id: string) {
-    return this.todosService.remove(id);
+  remove(@Param('id') id: string, @CurrentUser() user: { id: string }) {
+    return this.todosService.remove(id, user.id);
   }
 }

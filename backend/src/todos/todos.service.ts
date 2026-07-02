@@ -21,6 +21,7 @@ export class TodosService {
     return this.todoModel.find({ userId }).exec();
   }
 
+  // _id 和 userId 必须同时匹配，查不到统一当"不存在"处理（不区分"不是你的"和"根本没有"）
   async findOne(id: string, userId: string): Promise<TodoDocument> {
     const todo = await this.todoModel.findOne({ _id: id, userId }).exec();
     if (!todo) {
@@ -31,26 +32,29 @@ export class TodosService {
 
   // 在数据库里新建一条文档，返回创建好的文档
   // 把 DTO 的字段展开
-  create(dto: CreateTodoDto): Promise<TodoDocument> {
+  create(dto: CreateTodoDto, userId: string): Promise<TodoDocument> {
     return this.todoModel.create({
       ...dto,
+      userId,
       done: false,
       priority: dto.priority || TodoPriority.MEDIUM,
     });
   }
 
-  async update(id: string, dto: UpdateTodoDto): Promise<TodoDocument> {
+  async update(id: string, dto: UpdateTodoDto, userId: string): Promise<TodoDocument> {
     //  默认返回更新前的旧数据，加了这个才返回更新后的新数据
     // timestamps: true 已经在 Schema 里设了
-    const todo = await this.todoModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+    const todo = await this.todoModel
+      .findOneAndUpdate({ _id: id, userId }, dto, { new: true })
+      .exec();
     if (!todo) {
       throw new NotFoundException(`Todo with id ${id} not found`);
     }
     return todo;
   }
 
-  async remove(id: string): Promise<{ deleted: true; id: string }> {
-    const result = await this.todoModel.findByIdAndDelete(id).exec();
+  async remove(id: string, userId: string): Promise<{ deleted: true; id: string }> {
+    const result = await this.todoModel.findOneAndDelete({ _id: id, userId }).exec();
     if (!result) {
       throw new NotFoundException(`Todo with id ${id} not found`);
     }
