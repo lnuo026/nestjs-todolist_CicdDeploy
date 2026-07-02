@@ -17,12 +17,12 @@ export class TodosService {
   // 查询 todos collection 里的所有文档，不加条件就是全部
   // .exec() — 执行这个查询，返回 Promise
   // 返回值是 Promise<TodoDocument[]>，因为 Mongoose 操作是异步的，最终会得到一个 TodoDocument 数组。
-  findAll(): Promise<TodoDocument[]> {
-    return this.todoModel.find().exec();
+  findAll(userId: string): Promise<TodoDocument[]> {
+    return this.todoModel.find({ userId }).exec();
   }
 
-  async findOne(id: string): Promise<TodoDocument> {
-    const todo = await this.todoModel.findById(id).exec();
+  async findOne(id: string, userId: string): Promise<TodoDocument> {
+    const todo = await this.todoModel.findOne({ _id: id, userId }).exec();
     if (!todo) {
       throw new NotFoundException(`Todo with id ${id} not found`);
     }

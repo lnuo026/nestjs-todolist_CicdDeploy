@@ -12,6 +12,7 @@ import {
 import { TodosService } from '../todos.service';
 import { CreateTodoDto } from '../dto/create-todo.dto';
 import { UpdateTodoDto } from '../dto/update-todo.dto';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 
 @Controller('todos')
 export class TodosController {
@@ -20,8 +21,8 @@ export class TodosController {
 
   // 把 findAll 方法绑定到 GET /todos
   @Get()
-  findAll() {
-    return this.todosService.findAll();
+  findAll(@CurrentUser() user: { id: string }) {
+    return this.todosService.findAll(user.id);
   }
 
   @Get(':id')
@@ -33,8 +34,8 @@ export class TodosController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() dto: CreateTodoDto) {
-    return this.todosService.create(dto);
+  create(@Body() dto: CreateTodoDto, @CurrentUser() user: { id: string }) {
+    return this.todosService.create({ ...dto, userId: user.id });
   }
 
   @Patch(':id')
