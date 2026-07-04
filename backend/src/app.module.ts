@@ -1,5 +1,5 @@
 import { ThrottlerModule } from '@nestjs/throttler';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { WinstonModule } from 'nest-winston';
@@ -7,6 +7,7 @@ import { HealthModule } from './health/health.module';
 
 import { validationSchema } from './config/validation';
 import { winstonConfig } from './common/logger/winston.config';
+import { OriginProtectionMiddleware } from './common/middleware/origin-protection.middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodosModule } from './modules/TodosModule';
@@ -60,4 +61,8 @@ import { UserModule } from './modules/user/user.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(OriginProtectionMiddleware).forRoutes('*');
+  }
+}

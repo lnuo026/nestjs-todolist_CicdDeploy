@@ -11,12 +11,14 @@ export class OriginProtectionMiddleware implements NestMiddleware {
       return next();
     }
 
+    //环境变量读允许的来源,信任的前端地址,只有这个来源的请求才放行
     const allowedOrigin = process.env.FRONTEND_URL;
 
     const origin = req.headers.origin ?? req.headers.referer;
 
+    // !origin.startsWith(allowedOrigin) — 来源不是以前端地址开头(说明请求来自别的网站,可能是攻击,拒绝)
     if (!allowedOrigin || !origin || !origin.startsWith(allowedOrigin)) {
-      throw new ForbiddenException('Invalid origin: request must cone from the trusted frontend');
+      throw new ForbiddenException('Invalid origin: request must come from the trusted frontend');
     }
     next();
   }
