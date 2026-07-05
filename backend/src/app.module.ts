@@ -3,6 +3,8 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { WinstonModule } from 'nest-winston';
+import { ClsModule } from 'nestjs-cls';
+import { randomUUID } from 'crypto';
 import { HealthModule } from './health/health.module';
 
 import { validationSchema } from './config/validation';
@@ -19,6 +21,16 @@ import { UserModule } from './modules/user/user.module';
 // isGlobal: true 让你在任意模块里都能直接注入 ConfigService，无需每个模块都写 imports: [ConfigModule]
 @Module({
   imports: [
+    // 每个请求进来时自动生成一个 traceId，挂进这个请求的异步上下文里，
+    // mount:true  让它自动注册成全局中间件，不用自己手动 configure()
+    ClsModule.forRoot({
+      middleware: {
+        mount: true,
+        generateId: true,
+        idGenerator: () => randomUUID(),
+      },
+    }),
+
     // 防止暴力攻击
     ThrottlerModule.forRoot([
       {
@@ -38,10 +50,8 @@ import { UserModule } from './modules/user/user.module';
     MongooseModule.forRootAsync({
       // "这个工厂函数需要 ConfigModule 提供的东西"
       imports: [ConfigModule],
-
       // "具体注入 ConfigService 到工厂函数"
       inject: [ConfigService],
-
       // "工厂函数定义如下：接收 ConfigService 作为参数，返回一个对象"
       // 一个工厂函数。NestJS 启动时调用它，它返回 MongooseModule 需要的配置对象。
       // 在这里我们用工厂函数先注入 ConfigService，再从中读 URI。
