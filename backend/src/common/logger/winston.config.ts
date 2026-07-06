@@ -7,11 +7,11 @@ import { ClsServiceManager } from 'nestjs-cls';
 // 自定义一个 winston format：从当前请求的 CLS 上下文里取出 traceId，塞进每条日志的字段里。
 // ClsServiceManager.getClsService() 不需要靠 NestJS 依赖注入就能拿到 ClsService，
 // 因为这里是在普通函数里用，不是在 Nest 管理的类里，没法用 @Injectable() 那套注入方式
-const traceIdfFormat = winston.format((info) => {
+const traceIdFormat = winston.format((info) => {
   const cls = ClsServiceManager.getClsService();
 
   //isActive() 判断当前是不是真的处在一次请求的上下文里
-  info.tracedId = cls.isActive() ? cls.getId() : 'startup';
+  info.traceId = cls.isActive() ? cls.getId() : 'startup';
   return info;
 });
 
@@ -34,7 +34,7 @@ export const winstonConfig = {
         // 给日志添加耗时字段
         winston.format.ms(),
         // nestLike() 是"最终把 info对象渲染成一行好看的文字"，它得在所有字段都准备好之后才执行。
-        traceIdfFormat(),
+        traceIdFormat(),
         // 把日志格式化成 “Nest 风格”。
         // "TodosApp" 是日志前缀，让输出更易读
         nestWinstonModuleUtilities.format.nestLike('Todolist', {
