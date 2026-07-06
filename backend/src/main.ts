@@ -12,6 +12,8 @@ import helmet from 'helmet';
 import { JwtAuthGuard } from './common/guards/jwt.guard';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
+import { LoggingInterceptor } from './common/logger/logging.interceptor';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: WinstonModule.createLogger(winstonConfig),
@@ -37,7 +39,7 @@ async function bootstrap() {
   app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   // 全局使用响应拦截器，统一格式化所有成功响应。Controller 里直接 return 数据，拦截器会把它包装成 { data: ..., message: 'ok' } 的格式。
-  app.useGlobalInterceptors(new ResponseInterceptor());
+  app.useGlobalInterceptors(new ResponseInterceptor(), new LoggingInterceptor());
 
   // 所有错误统一输出：statusCode / error / message / timestamp / path
   // 前端只处理一种格式
