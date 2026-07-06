@@ -21,8 +21,10 @@ import { UserModule } from './modules/user/user.module';
 // isGlobal: true 让你在任意模块里都能直接注入 ConfigService，无需每个模块都写 imports: [ConfigModule]
 @Module({
   imports: [
-    // 每个请求进来时自动生成一个 traceId，挂进这个请求的异步上下文里，
-    // mount:true  让它自动注册成全局中间件，不用自己手动 configure()
+    // ClsModule 是 nestjs-cls 提供的模块。forRoot({...}) = "注册这个模块并传入配置"。
+    // mount:true  让它自动注册成全局中间件，不用自己手动 configure(),请求最开始"介入,为每个请求
+    // generateId: true = 为每个请求自动生成一个唯一 ID。
+    // idGenerator = 指定"怎么生成这个 ID"。显式指定用 UUID,
     ClsModule.forRoot({
       middleware: {
         mount: true,
