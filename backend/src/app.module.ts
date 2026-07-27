@@ -12,7 +12,6 @@ import { winstonConfig } from './common/logger/winston.config';
 import { OriginProtectionMiddleware } from './common/middleware/origin-protection.middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TodosModule } from './modules/TodosModule';
 
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
@@ -66,7 +65,6 @@ import { UserModule } from './modules/user/user.module';
     //  注册日志系统,让 Nest 的日志输出走 Winston。
     WinstonModule.forRoot(winstonConfig),
     HealthModule,
-    TodosModule,
     AuthModule,
     UserModule,
   ],

@@ -4,7 +4,6 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import { useUserStore } from './store/userStore';
 import { getMe } from './api/auth';
-import TodoPage from './pages/TodoPage';
 
 export default function App() {
   const { setUser, setInitialized } = useUserStore();
@@ -20,13 +19,12 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        {/* 访问 / → 显示 Todolist(但要先经过登录检查) */}
+        {/* 空壳占位：todos 模块已下线，等待拓麻青蛙宠物养成主界面上线 */}
         <Route
           path="/"
           element={
             <ProtectedRoute>
-              {' '}
-              <TodoPage />{' '}
+              <div>拓麻青蛙 施工中</div>
             </ProtectedRoute>
           }
         />
