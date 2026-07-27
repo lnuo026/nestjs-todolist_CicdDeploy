@@ -15,6 +15,7 @@ import { AppService } from './app.service';
 
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+import { PetModule } from './modules/pet/pet.module';
 
 // ConfigModule.forRoot(...) 会在应用启动时读取环境变量，并用你在 validation.ts 定义的规则校验
 // isGlobal: true 让你在任意模块里都能直接注入 ConfigService，无需每个模块都写 imports: [ConfigModule]
@@ -67,6 +68,7 @@ import { UserModule } from './modules/user/user.module';
     HealthModule,
     AuthModule,
     UserModule,
+    PetModule,
   ],
   controllers: [AppController],
   providers: [AppService],
