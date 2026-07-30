@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Pet, PetDocument } from './schemas/pet.schema';
@@ -12,6 +12,9 @@ const STAMINA_DECAY_PER_HOUR = 1;
 const SICK_THRESHOLD = 20;
 
 const FEED_HUNGER_GAIN = 30;
+
+// 简化版升级：每攒够 100 exp 升一级，不做每级递增门槛，先跑通"打游戏能升级"这条链路。
+const LEVEL_UP_EXP = 100;
 
 @Injectable()
 export class PetService {
@@ -31,6 +34,19 @@ export class PetService {
     const pet = await this.findOrCreateForUser(userId);
     pet.hunger = Math.min(100, pet.hunger + FEED_HUNGER_GAIN);
     pet.lastInteractionAt = new Date();
+    return pet.save();
+  }
+
+  // GameService 结算一局 Frogger 之后调用，给宠物加经验，攒够了就升级。
+  async addExp(petId: Types.ObjectId, amount: number): Promise<PetDocument> {
+    const pet = await this.petModel.findById(petId);
+    if (!pet) throw new NotFoundException('宠物不存在');
+
+    pet.exp += amount;
+    while (pet.exp >= LEVEL_UP_EXP) {
+      pet.exp -= LEVEL_UP_EXP;
+      pet.level += 1;
+    }
     return pet.save();
   }
 

@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import { useUserStore } from './store/userStore';
 import { getMe } from './api/auth';
 import PetDashboardPage from './pages/PetDashboardPage';
+import GamePage from './pages/GamePage';
 
 export default function App() {
   const { setUser, setInitialized } = useUserStore();
@@ -25,6 +26,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <PetDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/game"
+          element={
+            <ProtectedRoute>
+              <GamePage />
             </ProtectedRoute>
           }
         />

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getMyPet, feedPet } from '../api/pet';
 import { usePetStore } from '../store/petStore';
 
@@ -42,6 +43,13 @@ export default function PetDashboardPage() {
         >
           {feeding ? '喂食中...' : '喂食'}
         </button>
+
+        <Link
+          to="/game"
+          className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium"
+        >
+          去玩 Frogger
+        </Link>
       </div>
     </div>
   );
