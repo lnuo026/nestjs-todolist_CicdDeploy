@@ -16,17 +16,5 @@
                "npm run lint --prefix frontend --",
                "prettier --write"
           ]
-     },
-     "devDependencies": {
-          "@commitlint/cli": "^21.0.2",
-          "@commitlint/config-conventional": "^21.0.2",
-          "concurrently": "^9.0.0",
-          "lint-staged": "^16.4.0",
-          "prettier": "^3.9.4"
-     },
-     "dependencies": {
-          "@nestjs/platform-socket.io": "^11.1.28",
-          "@nestjs/websockets": "^11.1.28",
-          "socket.io": "^4.8.3"
      }
 }
